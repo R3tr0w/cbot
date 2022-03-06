@@ -1,3 +1,4 @@
 module.exports = async (message) => {
-    message.channel.send('Parataram mo!')
+    //response message
+    message.channel.send('Nani')
 }

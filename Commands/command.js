@@ -1,20 +1,13 @@
 const { prefix } = require('../config.json')
+const uuid = require('uuid')
 
-module.exports = (client, aliases, callback) => {
-    if (typeof aliases === 'string') {
-        aliases = [aliases]
-    }
-
+module.exports = async (client, session, callback) => {
     client.on('message', message => {
         const { content } = message
-        aliases.forEach(alias => {
-            const command = `${alias}`
-
-            if (content.startsWith(`${command}`) || content === command) {
-                console.log(`Running the command ${command}`)
-                callback(message)
-            }
-        });
-
+        session = content === 'reset' ? uuid.v4() : session
+        const { author } = message
+        if (author.bot === false) {
+            callback(message, session)
+        }
     })
 }
