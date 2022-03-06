@@ -5,9 +5,10 @@ const project_id = process.env.PROJECT_ID
 const account_path = process.env.G_PATH
 
 module.exports = async (message, sessionId) => {
-    console.log("sending message")
     const { content } = message
-    const sessionClient = new dialogflow.SessionsClient()
+    const sessionClient = new dialogflow.SessionsClient({
+        keyFilename: account_path
+    })
     const sessionPath = sessionClient.projectAgentSessionPath(
         project_id,
         sessionId
