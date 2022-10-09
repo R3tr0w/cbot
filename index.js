@@ -1,6 +1,6 @@
 let { PythonShell } = require('python-shell')
-const Discord = require('discord.js')
-const client = new Discord.Client()
+const { Client, GatewayIntentBits, Partials, intents } = require('discord.js')
+
 const express = require("express")
 const env = require('dotenv').config()
 const app = express()
@@ -17,22 +17,22 @@ const response = require("./Commands/response")
 app.listen(PORT, () => {
     console.log("Bot is now live")
     const session = uuid.v4()
+    const client = new Client({
+        intents: [
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildBans,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.MessageContent,
+        ],
+        partials: [Partials.Channel],
+    })
     client.on("ready", () => {
         console.log(`Bot is currently running on version v${require('./package.json').version}`)
 
         command(client, session, message => {
             // pong(message);
             response(message, session)
-            options = {
-                mode: 'text',
-                pythonOptions: ['-u'],
-                args: ' development'
-            }
-            PythonShell.run('Py/dev.py', options, (err, res) => {
-                if (err) throw err;
-                console.log(res)
-            });
-
         })
     });
 
